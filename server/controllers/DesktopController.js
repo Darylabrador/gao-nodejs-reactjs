@@ -148,7 +148,6 @@ exports.updateDesktop =  async (req, res, next) => {
 exports.deleteOrdinateur = async (req, res, next) => {
     try {
         const { id } = req.params;
-        console.log(id)
         const desktopInfo = await Desktop.findByPk(id);
         if(!desktopInfo) {
             return res.status(200).json({

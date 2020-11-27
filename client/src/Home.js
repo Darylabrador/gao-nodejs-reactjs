@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Ordinateur from './components/Ordinateur';
 import Grid from '@material-ui/core/Grid';
 import Pagination from '@material-ui/lab/Pagination';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Button from '@material-ui/core/Button';
 
@@ -15,6 +15,7 @@ import AjoutOrdinateurModal from './components/modalAjoutOrdi';
 import { getToken, removeToken } from './services/tokenConfig';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Login from './Login';
 
 export default class Home extends Component {
     constructor(props) {
@@ -24,7 +25,7 @@ export default class Home extends Component {
             currentDate: new Date().toISOString().substr(0, 10),
             currentPage: 1,
             totalPage: null,
-            isAuth: false
+            redirect: false
         }
 
         /**
@@ -35,6 +36,7 @@ export default class Home extends Component {
         this.getAddOrdi       = this.getAddOrdi.bind(this);
         this.getDeleteOrdi    = this.getDeleteOrdi.bind(this);
         this.updateOrdi       = this.updateOrdi.bind(this);
+        this.logout           = this.logout.bind(this);
         
     }
 
@@ -130,9 +132,9 @@ export default class Home extends Component {
     /**
      * handle the user's logout
      */
-    logout() {
+    async logout() {
         removeToken();
-        // location.href = '/login';
+        await this.setState({redirect: true})
     }
     
     
@@ -140,62 +142,74 @@ export default class Home extends Component {
      * Render the home component
      */
     render() {
-        return (
-            <React.Fragment>
-                <Router>
-                    <header>
-                        <Link to="/" id="btnWelcome" className="whiteFont">  Gestion ordinateur </Link>
-                        <Button onClick={this.logout}>
-                            <ExitToAppIcon className="whiteFont" />
-                        </Button>
-                    </header>
-                </Router>
-
-                <ToastContainer
-                    position="bottom-right"
-                    autoClose={5000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                />
-
-                <div className="marginDate alignElement">
-                    <MuiPickersUtilsProvider utils={DateFnsUtils} >
-                        <KeyboardDatePicker
-                            disableToolbar
-                            variant="inline"
-                            format="yyyy-MM-dd"
-                            margin="normal"
-                            id="date-picker-inline"
-                            value={this.state.currentDate}
-                            onChange={this.handleDateChange}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
-                        />
-                    </MuiPickersUtilsProvider>
-
-                    <AjoutOrdinateurModal ajoutOrdi={this.getAddOrdi} />
-                </div>
-
-                
-                <div className="pagination">
-                    <Pagination count={this.state.totalPage} size="small" onChange={this.handleChangePage} />
-                </div>
-
-                <Grid container spacing={3} justify="space-around" id="cardContainer">
-                    {this.state.ordinateurs.map((ordi, index) => (
-                        <Grid item xs={12} sm={3} >
-                            <Ordinateur key={index} ordinateur={ordi} deleteOrdi={this.getDeleteOrdi} date={this.state.currentDate} updateOrdi={this.updateOrdi} />
-                        </Grid>
-                    ))}
-                </Grid>
-             
-            </React.Fragment>
-        )
+        if (this.state.redirect) {
+            return (
+                <React.Fragment>
+                    <Router>
+                        <Route exact path="/" >
+                            <Login />
+                        </Route>
+                    </Router>
+                </React.Fragment>
+            )
+        } else {
+            return (
+                <React.Fragment>
+                    <Router>
+                        <header>
+                            <Link to="/" id="btnWelcome" className="whiteFont">  Gestion ordinateur </Link>
+                            <Button onClick={this.logout}>
+                                <ExitToAppIcon className="whiteFont" />
+                            </Button>
+                        </header>
+                    </Router>
+    
+                    <ToastContainer
+                        position="bottom-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                    />
+    
+                    <div className="marginDate alignElement">
+                        <MuiPickersUtilsProvider utils={DateFnsUtils} >
+                            <KeyboardDatePicker
+                                disableToolbar
+                                variant="inline"
+                                format="yyyy-MM-dd"
+                                margin="normal"
+                                id="date-picker-inline"
+                                value={this.state.currentDate}
+                                onChange={this.handleDateChange}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                            />
+                        </MuiPickersUtilsProvider>
+    
+                        <AjoutOrdinateurModal ajoutOrdi={this.getAddOrdi} />
+                    </div>
+    
+                    
+                    <div className="pagination">
+                        <Pagination count={this.state.totalPage} size="small" onChange={this.handleChangePage} />
+                    </div>
+    
+                    <Grid container spacing={3} justify="space-around" id="cardContainer">
+                        {this.state.ordinateurs.map((ordi, index) => (
+                            <Grid item xs={12} sm={3} >
+                                <Ordinateur key={index} ordinateur={ordi} deleteOrdi={this.getDeleteOrdi} date={this.state.currentDate} updateOrdi={this.updateOrdi} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                 
+                </React.Fragment>
+            )
+        }
     }
 }

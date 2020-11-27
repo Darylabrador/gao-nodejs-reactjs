@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { setToken } from './services/tokenConfig';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Home from './Home';
 
 export default class Login extends Component {
     constructor(props) {
@@ -10,6 +12,7 @@ export default class Login extends Component {
         this.state = {
             email: "",
             password: "",
+            redirect: false
         }
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -46,9 +49,10 @@ export default class Login extends Component {
             password: this.state.password
         });
         let responseData = LoginData.data;
-            if (responseData.success) {
+        
+        if (responseData.success) {
             setToken(responseData.token);
-            // location.href = '/';
+            await this.setState({ redirect: true })
             await this.setState({ email: "", password: "" });
         } else {
             alert(responseData.message)
@@ -60,17 +64,29 @@ export default class Login extends Component {
     * Render the login component
     */
     render() {
-        return (
-            <div className="loginContainer">
-                <form onSubmit={this.handleSubmit} className="loginForm">
-                    <h3 className="whiteFont"> Bienvenue sur l'espace culturel </h3>
-                    <TextField type="email" label="Adresse email" value={this.state.email} onChange={this.handleChangeEmail} className="loginInput" />
-                    <TextField type="password" label="Mot de passe" value={this.state.password} onChange={this.handleChangePassword} className="loginInput" />
-                    <div className="btnLoginContainer">
-                        <Button type="submit" variant="contained" color="primary" size="small" className="btnLogin"> Se connecter</Button>  
-                    </div>
-                </form>
-            </div>
-        )
+        if(this.state.redirect) {
+            return (
+                <React.Fragment>
+                    <Router>
+                        <Route exact path="/" >
+                            <Home />
+                        </Route>
+                    </Router>
+                </React.Fragment>
+            )
+        } else {
+            return (
+                <div className="loginContainer">
+                    <form onSubmit={this.handleSubmit} className="loginForm">
+                        <h3 className="whiteFont"> Bienvenue sur l'espace culturel </h3>
+                        <TextField type="email" label="Adresse email" value={this.state.email} onChange={this.handleChangeEmail} className="loginInput" />
+                        <TextField type="password" label="Mot de passe" value={this.state.password} onChange={this.handleChangePassword} className="loginInput" />
+                        <div className="btnLoginContainer">
+                            <Button type="submit" variant="contained" color="primary" size="small" className="btnLogin"> Se connecter</Button>  
+                        </div>
+                    </form>
+                </div>
+            )
+        }
     }
 }
