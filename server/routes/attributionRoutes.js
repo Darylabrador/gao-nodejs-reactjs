@@ -30,6 +30,6 @@ router.post('/attributions', attributionController.postAttribution);
 * @param {function} attributionController.removeAttribution
 * @return {JSON}
 */
-router.delete('/attributions', attributionController.removeAttribution);
+router.delete('/attributions/:id', attributionController.removeAttribution);
 
 module.exports = router;

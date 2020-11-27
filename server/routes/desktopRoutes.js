@@ -40,11 +40,24 @@ router.post('/computers', desktopController.postComputers);
 * @name deleteOrdinateur DELETE
 * @function
 * @memberof module:routers/desktop
-* @param {string} '/api/computers' - uri
+* @param {string} '/api/computers/:id' - uri
 * @param {function} desktopController.deleteOrdinateur
 * @return {JSON}
 */
-router.delete('/computers', desktopController.deleteOrdinateur);
+router.delete('/computers/:id', desktopController.deleteOrdinateur);
+
+
+
+/**
+* Udate information for specific desktop
+* @name updateDesktop PUT
+* @function
+* @memberof module:routers/desktop
+* @param {string} '/api/computers/:id' - uri
+* @param {function} desktopController.updateDesktop
+* @return {JSON}
+*/
+router.put('/computers/:id', desktopController.updateDesktop)
 
 
 module.exports = router;

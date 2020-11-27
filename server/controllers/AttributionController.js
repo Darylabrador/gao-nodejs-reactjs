@@ -65,7 +65,7 @@ exports.postAttribution = async (req, res, next) => {
  * @throws Will throw an error if one error occursed
  */
 exports.removeAttribution = async (req, res, next) => {
-    const id = req.query.id;
+    const { id } = req.params
     try {
         const attribution = await Attribution.findOne({
             where: { id }
