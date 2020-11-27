@@ -59,7 +59,7 @@ export default class AjoutAttributionModal extends Component {
                 const responseData = clientData.data.clientList;
                 let userLength = responseData.length;
 
-                if (userLength == 0) {
+                if (userLength === 0) {
                     await this.setState({ userExist: false, defaultProps: { ...this.state.defaultProps, options: responseData } });
                 } else {
                     await this.setState({ userExist: true, defaultProps: { ...this.state.defaultProps, options: responseData } });
@@ -92,11 +92,10 @@ export default class AjoutAttributionModal extends Component {
                 }
             })
 
-            const attributionDataSend = attributionData.data.data;
-            await this.props.getAddAttributions(attributionDataSend);
+            const attributionDataSend = attributionData.data.content;
+            this.props.getAddAttributions(attributionDataSend);
             flashSuccess("Créneau réserver !")
             this.handleClose();
-            
         } catch (error) {
             console.error(error)
         }

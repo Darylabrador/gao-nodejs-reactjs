@@ -37,7 +37,7 @@ export default class Home extends Component {
         this.getDeleteOrdi    = this.getDeleteOrdi.bind(this);
         this.updateOrdi       = this.updateOrdi.bind(this);
         this.logout           = this.logout.bind(this);
-        
+
     }
 
 
@@ -136,7 +136,6 @@ export default class Home extends Component {
         removeToken();
         await this.setState({redirect: true})
     }
-    
     
     /**
      * Render the home component

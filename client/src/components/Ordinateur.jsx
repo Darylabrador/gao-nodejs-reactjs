@@ -27,23 +27,32 @@ export default class OrdinateurCard extends Component {
         this.getSupAttribution = this.getSupAttribution.bind(this);
         this.getAddAttributions = this.getAddAttributions.bind(this);
         this.updateOrdi         = this.updateOrdi.bind(this);
-    }
 
+    }
 
     componentDidMount() {
         this.initialize()
         this.displayHoraire()
     }
 
+    componentWillUnmount(){
+        this.setState({
+            attributions: {},
+            timeslots: [],
+            date: this.props.date
+        })
+    }
+
     
     /**
      * Create assign array (associative array)
      */
-    initialize() {
+    async initialize() {
         var attributionInfo = this.props.ordinateur.Attributions;
-        if (attributionInfo.length !== 0) {
+        var attributionObject = {};
+        if (attributionInfo.length != 0) {
             attributionInfo.forEach(element => {
-                this.state.attributions[element.hours] ={
+                attributionObject[element.hours] ={
                     id: element.Client.id,
                     surname: element.Client.surname,
                     name: element.Client.name,
@@ -51,6 +60,7 @@ export default class OrdinateurCard extends Component {
                 }
             })
         }
+        await this.setState({ attributions: attributionObject })
     }
 
 
@@ -86,19 +96,22 @@ export default class OrdinateurCard extends Component {
      * @param {*} idAssign 
      */
     async getSupAttribution(idAssign){
-        await this.setState({ attributions: {}});
-        const refreshDeleteData = this.state.timeslots.filter(element => element.Client.idAssign != idAssign);
+        var attributionObject = {};
+        const refreshDeleteData = this.state.timeslots.filter(element => element.client.idAssign != idAssign);
         refreshDeleteData.forEach(element => {
-            if (element.Client.id) {
-                this.state.attributions[element.hours] = {
-                    id: element.Client.id,
-                    surname: element.Client.surname,
-                    name: element.Client.name,
-                    idAssign: element.Client.id
+            if (element.client.id) {
+                attributionObject[element.hours] = {
+                    id: element.client.id,
+                    surname: element.client.surname,
+                    name: element.client.name,
+                    idAssign: element.id
                 }
             }
         });
-        this.displayHoraire();
+
+        await this.setState({ attributions: attributionObject })
+        await this.props.updateOrdi();
+
     }
 
 
@@ -107,16 +120,20 @@ export default class OrdinateurCard extends Component {
      * @param {*} attributions 
      */
     async getAddAttributions(attributions) {
+        var attributionObject = {};
         if (attributions) {
-            this.state.attributions[attributions.hours] = {
-                id: attributions.client.id,
+            attributionObject[attributions.hours] = {
+                id: attributions.Client.id,
                 surname: attributions.Client.surname,
                 name: attributions.Client.name,
                 idAssign: attributions.id
             }
-            await this.initialize()
-            await this.displayHoraire()
+            await this.setState({ attributions: {
+                ...attributions, attributionObject
+            }})
         }
+        await this.props.updateOrdi();
+
     }
 
 
@@ -133,6 +150,8 @@ export default class OrdinateurCard extends Component {
     updateOrdi() {
         this.props.updateOrdi();
     }
+
+
     /**
      * Render ordinateur component
      */
