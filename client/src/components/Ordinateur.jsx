@@ -132,8 +132,7 @@ export default class OrdinateurCard extends Component {
                 ...attributions, attributionObject
             }})
         }
-        await this.props.updateOrdi();
-
+       await this.props.updateOrdi();
     }
 
 
