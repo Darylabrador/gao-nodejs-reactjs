@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { setToken } from './services/tokenConfig';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Home from './Home';
 import { flashError } from './services/flashMessage';
 import { ToastContainer } from 'react-toastify';
@@ -74,6 +74,7 @@ export default class Login extends Component {
                         <Route exact path="/" >
                             <Home />
                         </Route>
+                        <Redirect to='/' />
                     </Router>
                 </React.Fragment>
             )
