@@ -5,6 +5,9 @@ import TextField from '@material-ui/core/TextField';
 import { setToken } from './services/tokenConfig';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Home from './Home';
+import { flashError } from './services/flashMessage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class Login extends Component {
     constructor(props) {
@@ -55,7 +58,7 @@ export default class Login extends Component {
             await this.setState({ redirect: true })
             await this.setState({ email: "", password: "" });
         } else {
-            alert(responseData.message)
+            flashError(responseData.message)
         }
     }
 
@@ -77,6 +80,19 @@ export default class Login extends Component {
         } else {
             return (
                 <div className="loginContainer">
+
+                    <ToastContainer
+                        position="bottom-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                    />
+
                     <form onSubmit={this.handleSubmit} className="loginForm">
                         <h3 className="whiteFont"> Bienvenue sur l'espace culturel </h3>
                         <TextField type="email" label="Adresse email" value={this.state.email} onChange={this.handleChangeEmail} className="loginInput" />
