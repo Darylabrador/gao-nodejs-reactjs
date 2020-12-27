@@ -49,7 +49,7 @@ router.delete('/computers/:id', desktopController.deleteOrdinateur);
 
 
 /**
-* Udate information for specific desktop
+* Update information for specific desktop
 * @name updateDesktop PUT
 * @function
 * @memberof module:routers/desktop

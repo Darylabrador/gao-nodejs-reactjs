@@ -6,7 +6,6 @@ const { validationResult } = require('express-validator');
 
 const User = require('../models/user');
 
-
 /** Handle admin connection
  * @name postLogin
  * @function
