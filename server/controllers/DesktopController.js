@@ -1,5 +1,5 @@
-const Desktop     = require('../models/desktop');
-const Client      = require('../models/client');
+const Desktop = require('../models/desktop');
+const Client = require('../models/client');
 const Attribution = require('../models/attribution');
 
 
@@ -18,7 +18,7 @@ var ITEM_PER_PAGE = 3;
  * @name getComputers
  * @function
  * @throws Will throw an error if one error occursed
- */ 
+ */
 exports.getComputers = async (req, res, next) => {
     const currentDate = req.query.date
     const page = +req.query.page || 1;
@@ -78,7 +78,7 @@ exports.getComputers = async (req, res, next) => {
 exports.postComputers = async (req, res, next) => {
     const { name } = req.body;
     try {
-        const desktop = new Desktop({name});
+        const desktop = new Desktop({ name });
         const newDesktop = await desktop.save();
 
         const returnDesktop = {
@@ -87,12 +87,12 @@ exports.postComputers = async (req, res, next) => {
             Attributions: []
         };
 
-        res.status(200).json({ 
+        res.status(200).json({
             success: true,
             message: 'Poste ajouté avec succès',
             content: returnDesktop
         });
-        
+
     } catch (error) {
         return res.status(200).json({
             success: false,
@@ -110,7 +110,7 @@ exports.postComputers = async (req, res, next) => {
  * @function
  * @throws Will throw an error if one error occursed
  */
-exports.updateDesktop =  async (req, res, next) => {
+exports.updateDesktop = async (req, res, next) => {
     const { id } = req.params
     const { name } = req.body;
 
@@ -149,7 +149,7 @@ exports.deleteOrdinateur = async (req, res, next) => {
     try {
         const { id } = req.params;
         const desktopInfo = await Desktop.findByPk(id);
-        if(!desktopInfo) {
+        if (!desktopInfo) {
             return res.status(200).json({
                 success: false,
                 message: 'Information introuvable',

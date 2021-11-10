@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import { apiService } from '../services/apiService';
 import React, { Component } from 'react';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
@@ -27,11 +27,7 @@ export default class SuppOrdiModal extends Component {
     async handleSubmit(event) {
         event.preventDefault();
         try {
-            const deleteOrdiData = await Axios.delete(`http://127.0.0.1:3001/api/computers/${this.state.idOrdi}`, {
-                headers: {
-                    Authorization: `Bearer ${getToken()}`
-                }
-            })
+            const deleteOrdiData = await apiService.delete(`/computers/${this.state.idOrdi}`)
 
             let responseData = deleteOrdiData.data;
 

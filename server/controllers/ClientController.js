@@ -1,6 +1,6 @@
 const { Op } = require('sequelize');
- 
-const Client      = require('../models/client');
+
+const Client = require('../models/client');
 const Attribution = require('../models/attribution');
 
 /** Get clients list for autocomplete
@@ -19,7 +19,7 @@ exports.getClients = async (req, res, next) => {
                         surname: {
                             [Op.substring]: client
                         }
-                    }, 
+                    },
                     {
                         name: {
                             [Op.substring]: client
@@ -47,10 +47,10 @@ exports.getClients = async (req, res, next) => {
  * @function
  * @throws Will throw an error if one error occursed
  */
-exports.createClient =  async (req, res, next) => {
-    const {surname, name, desktop, date, hours} = req.body;
+exports.createClient = async (req, res, next) => {
+    const { surname, name, desktop, date, hours } = req.body;
     try {
-        const client = new Client({surname, name});
+        const client = new Client({ surname, name });
         const createdClient = await client.save();
         const attribution = new Attribution({
             clientId: createdClient.id,

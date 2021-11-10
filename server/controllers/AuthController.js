@@ -1,6 +1,6 @@
 const dotenv = require('dotenv').config();
 const bcrypt = require('bcryptjs');
-const jwt    = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 const { validationResult } = require('express-validator');
 
@@ -15,7 +15,7 @@ exports.postLogin = async (req, res, next) => {
     const { email, password } = req.body;
     const errors = validationResult(req);
 
-    if(!errors.isEmpty()){
+    if (!errors.isEmpty()) {
         return res.status(200).json({
             success: false,
             message: errors.array()[0].msg,
@@ -24,7 +24,7 @@ exports.postLogin = async (req, res, next) => {
 
     try {
         const userExist = await User.findOne({ where: { email } });
-        if(!userExist){
+        if (!userExist) {
             return res.status(200).json({
                 success: false,
                 message: 'Identifiants invalides',
@@ -32,7 +32,7 @@ exports.postLogin = async (req, res, next) => {
         }
 
         const isEqual = await bcrypt.compare(password, userExist.password);
-        if(!isEqual){
+        if (!isEqual) {
             return res.status(200).json({
                 success: false,
                 message: 'Identifiants invalides',
@@ -41,7 +41,7 @@ exports.postLogin = async (req, res, next) => {
 
         const token = jwt.sign({
             userId: userExist.id
-            },
+        },
             process.env.JWT_SECRET,
             { expiresIn: '2h' }
         )

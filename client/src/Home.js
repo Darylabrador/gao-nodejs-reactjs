@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import { apiService } from './services/apiService';
 import React, { Component } from 'react';
 import Ordinateur from './components/Ordinateur';
 import Grid from '@material-ui/core/Grid';
@@ -12,7 +12,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers';
 import AjoutOrdinateurModal from './components/modalAjoutOrdi';
 
-import { getToken, removeToken } from './services/tokenConfig';
+import { removeToken } from './services/tokenConfig';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Login from './Login';
@@ -58,14 +58,11 @@ export default class Home extends Component {
             await this.setState({ paginationLink: {} });
             await this.setState({ totalPage: null });
 
-            const allInformation = await Axios.get('http://127.0.0.1:3001/api/computers', {
+            const allInformation = await apiService.get('/computers', {
                 params: {
                     date: this.state.currentDate,
                     page: this.state.currentPage
                 },
-                headers: {
-                    Authorization: `Bearer ${getToken()}`
-                }
             });
             const responseData = allInformation.data;
             await this.setState({ ordinateurs: responseData.desktopInfo });
