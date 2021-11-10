@@ -20,11 +20,11 @@ var ITEM_PER_PAGE = 3;
  * @throws Will throw an error if one error occursed
  */
 exports.getComputers = async (req, res, next) => {
-    const currentDate = req.query.date
+    console.log(req.query.params)
+    let currentDate = req.query.date;
     const page = +req.query.page || 1;
 
     try {
-
         // Define totalPage based on totalItem
         const totalItem = await Desktop.findAndCountAll();
         const totalPage = Math.ceil(totalItem.count / ITEM_PER_PAGE);
@@ -62,6 +62,7 @@ exports.getComputers = async (req, res, next) => {
             totalPage
         });
     } catch (error) {
+        console.log(error)
         return res.status(200).json({
             success: false,
             message: 'Ressource indisponible',

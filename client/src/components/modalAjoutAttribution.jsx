@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import AjoutClientModal from './modalAddClient';
-import { getToken } from '../services/tokenConfig';
 import { flashSuccess } from '../services/flashMessage';
 
 export default class AjoutAttributionModal extends Component {
@@ -47,11 +46,7 @@ export default class AjoutAttributionModal extends Component {
         if(clientLength > 2) {
 
             try {
-                const clientData = await apiService.get('/clients/search', {
-                    params: {
-                        client: client
-                    },
-                });
+                const clientData = await apiService.get(`/clients/search/?client=${client}`);
 
                 const responseData = clientData.data.clientList;
                 let userLength = responseData.length;

@@ -58,15 +58,16 @@ export default class Home extends Component {
             await this.setState({ paginationLink: {} });
             await this.setState({ totalPage: null });
 
-            const allInformation = await apiService.get('/computers', {
-                params: {
-                    date: this.state.currentDate,
-                    page: this.state.currentPage
-                },
-            });
+            const allInformation = await apiService.get(`/computers/?date=${this.state.currentDate}&page=${this.state.currentPage}`);
+
+            
             const responseData = allInformation.data;
-            await this.setState({ ordinateurs: responseData.desktopInfo });
-            await this.setState({ totalPage: responseData.totalPage });
+
+            if(responseData) {
+                console.log(responseData)
+                await this.setState({ ordinateurs: responseData.desktopInfo });
+                await this.setState({ totalPage: responseData.totalPage });
+            }
         } catch (error) {
             console.error(error)
         } 

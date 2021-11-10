@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { getToken } from '../services/tokenConfig';
 import { flashSuccess } from '../services/flashMessage';
 
 
